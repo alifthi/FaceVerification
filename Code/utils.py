@@ -7,8 +7,8 @@ class utils():
         imagesA = man['image_A']
         imagesB = man['image_B']
         label = man['match']
-        imagesA.apply(lambda addr: self.loadAndPrerocess('../Data'+addr))
-        imagesB.apply(lambda addr: self.loadAndPrerocess('../Data'+addr))
+        imagesA = imagesA.apply(lambda addr: self.loadAndPrerocess('../Data/'+addr))
+        imagesB.apply(lambda addr: self.loadAndPrerocess('../Data/'+addr))
         return [imagesA,imagesB,label]
         
     @staticmethod
@@ -29,4 +29,4 @@ class utils():
         pass
 
 u = utils()
-print(u.loadData('/home/alifathi/Documents/AI/Git/siameseNetwork/Data/verification_dev.csv'))
+a = u.loadData('/home/alifathi/Documents/AI/Git/siameseNetwork/Data/verification_dev.csv')
