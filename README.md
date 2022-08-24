@@ -26,3 +26,9 @@ numpy version "1.20.3"
 sklearn version "0.24.2"
 
 matplotlib version "3.4.3"
+
+# Data
+
+Data released in releases part. 
+
+This file contain a CSV file that contain 3 columns.The first and second columns are contain address of paired image and third one contain a label that shows is this pair similare of no! and anothere file (dev) contain images
