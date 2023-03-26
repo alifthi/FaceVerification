@@ -11,7 +11,7 @@ class Model:
         pass
     
     def build(self):
-        inp = ksl.Input([64,64,3])
+        inp = ksl.Input([128,128,3])
         x = ksl.Conv2D(64,(3,3),padding='same',activation='relu')(inp)
         x = ksl.MaxPool2D(pool_size=[2,2])(x)
         x = ksl.Dropout(0.3)(x)
@@ -23,21 +23,18 @@ class Model:
         x = ksl.Dense(256)(poolOut)
         model = tf.keras.Model(inp,x)
         
-        im1 = ksl.Input([64,64,3])
-        im2 = ksl.Input([64,64,3])
+        im1 = ksl.Input([128,128,3])
+        im2 = ksl.Input([128,128,3])
         feature1 = model(im1)
         feature2 = model(im2)
         distance = ksl.Lambda(self.euclidean_distance)([feature1,feature2])
         net = tf.keras.Model([im1,im2],distance)
-
         return net
-    
     def compileModel(self):
-        self.net.compile(loss='binart_crossentropy',optimizer='adam',metrics=['accuracy'])
-        
-    
+        self.net.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+        self.summary()
     def train(self,images,target):
-        self.net.fit(images,self.target,epochs=10,batch_size=32)
+        self.net.fit(images,target,epochs=10,batch_size=32)
 
     @staticmethod
     def plotHistory(Hist):

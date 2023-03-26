@@ -1,9 +1,10 @@
-import siamese as Model
-import utils as utils
+from siamese import Model
+from utils import utils
 import numpy as np
 model = Model()
 util = utils()
-imageA,imageB,label = util.loadData('/home/alifathi/Documents/AI/Git/siameseNetwork/Data/verification_dev.csv')
-
+imageA,imageB,label = util.loadData(r'C:\Users\alifa\Documents\AI\DATA\Robtech\HW4\HW4-dataset\dataset\classification\train1000')
+imageA = np.concatenate(imageA,axis = 0)
+imageB = np.concatenate(imageB,axis = 0)
 model.compileModel()
-model.train(np.concatenate([imageA,imageB]),np.array(label))
+model.train([imageA,imageB],np.array(label))
