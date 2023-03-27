@@ -26,7 +26,8 @@ class Model:
         net = tf.keras.Model([im1,im2],distance)
         return net
     def compileModel(self):
-        self.net.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+        optim = tf.keras.optimizers.SGD(learning_rate=0.01)
+        self.net.compile(loss='binary_crossentropy',optimizer=optim,metrics=['accuracy'])
         self.net.summary()
     def train(self,images,target,valData = None):
         self.net.fit(images,target,epochs=10,batch_size=32,validation_data=valData)
