@@ -6,36 +6,24 @@ import numpy as np
 class utils():
     def loadData(self,dir):
         data = []
-        mismatchedData = []
+        dataInAFolder = []
         for f in glob(dir + '\\*'):
-            matchedData = []
-            if len(mismatchedData) == 3:
-                mismatchedData = []
-            isMismatchAppended = False   
-            for j, im in enumerate(glob(f + '\\*')):
-                if isMismatchAppended == False and (len(mismatchedData) == 0 or len(mismatchedData) == 1):
-                    mismatchedData.append(im)
-                    isMismatchAppended = True
-                    continue
-                if (j == 2 and isMismatchAppended == True) or (j ==1 and isMismatchAppended == False):
-                    matchedData.append(im)
-                    break
-                else:
-                    matchedData.append(im)
-            matchedData.append(1)
-            data.append(matchedData)
-            if len(mismatchedData) == 2:
-                mismatchedData.append(0)
-                data.append(mismatchedData)
+            for im in glob(f + '\\*'):
+                dataInAFolder.append(im)
+            data.append(dataInAFolder)
+            dataInAFolder = []
+        data = np.array(data)
+        matchedData = [list(data[i,[j,j+1]])+[1] for j in range(0,data.shape[1],2) for i in range(data.shape[0])]     
+        mismatchedData = [list(data[[i,i+1],j])+[0] for i in range(0, data.shape[0],2) for j in range(data.shape[1])]         
+        data = matchedData + mismatchedData
+        print(np.shape(data))
         data = pd.DataFrame(data,columns = ['image_A','image_B','match'])  
-        print(data['image_A'][0])
         imagesA = data['image_A']
         imagesB = data['image_B']
         label = data['match']
         imagesA = imagesA.apply(lambda addr: self.loadAndPrerocess(addr))
         imagesB = imagesB.apply(lambda addr: self.loadAndPrerocess(addr))
         return [imagesA,imagesB,label]
-        
     @staticmethod
     def loadAndPrerocess(path):
         image = cv.imread(path)
