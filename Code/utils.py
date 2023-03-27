@@ -16,7 +16,6 @@ class utils():
         matchedData = [list(data[i,[j,j+1]])+[1] for j in range(0,data.shape[1],2) for i in range(data.shape[0])]     
         mismatchedData = [list(data[[i,i+1],j])+[0] for i in range(0, data.shape[0],2) for j in range(data.shape[1])]         
         data = matchedData + mismatchedData
-        print(np.shape(data))
         data = pd.DataFrame(data,columns = ['image_A','image_B','match'])  
         imagesA = data['image_A']
         imagesB = data['image_B']

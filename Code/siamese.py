@@ -27,10 +27,10 @@ class Model:
         return net
     def compileModel(self):
         optim = tf.keras.optimizers.SGD(learning_rate=0.01)
-        self.net.compile(loss='binary_crossentropy',optimizer=optim,metrics=['accuracy'])
+        self.net.compile(loss = self.controstivLoss(),optimizer=optim,metrics=['accuracy'])
         self.net.summary()
     def train(self,images,target,valData = None):
-        self.net.fit(images,target,epochs=10,batch_size=32,validation_data=valData)
+        self.net.fit(images,target,epochs=10,batch_size=128,validation_data=valData)
     @staticmethod
     def plotHistory(Hist):
         # plot History
@@ -49,6 +49,7 @@ class Model:
     @staticmethod
     def controstivLoss(m = 1.0):
         def loss(yTrue,yPred):
+            yTrue = tf.cast(yTrue, tf.float32)
             squarePred = tf.square(yPred)
             l = yTrue*squarePred+(1-yTrue)*tf.square(tf.maximum(0.0,m-squarePred))
             return tf.reduce_mean(l)
