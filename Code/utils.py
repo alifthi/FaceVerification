@@ -33,7 +33,7 @@ class utils():
         image = np.expand_dims(image,axis = 0)
         return image
     @staticmethod
-    def Split(images,label):
-        return train_test_split(images,label,test_size=0.2)
+    def Split(imagesA,imagesB,label):
+        return train_test_split(imagesA,imagesB,label,test_size=0.2)
     def visualizeData(self):
         pass
