@@ -18,6 +18,7 @@ class Model:
         x = ksl.GlobalAveragePooling2D()(x)
         x = ksl.Flatten()(x)
         x = ksl.Dense(256)(x)
+        x = ksl.Lambda(lambda x: tf.math.l2_normalize(x,axis = 1))(x)
         model = tf.keras.Model(inp,x)
         im1 = ksl.Input([128,128,3])
         im2 = ksl.Input([128,128,3])
