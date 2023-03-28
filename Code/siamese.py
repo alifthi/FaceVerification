@@ -5,10 +5,12 @@ import sklearn as sk
 import numpy as np
 from matplotlib import pyplot as plt
 class Model:
-    def __init__(self):
-        self.net =  self.build() 
-    def build(self):
-        inp = ksl.Input([128,128,3])
+    def __init__(self,mode = 'simple'):
+        self.mode = mode
+        self.net =  None
+    def build(self,mode = 'simple'):
+        inputShape = [128,128,3]
+        inp = ksl.Input(inputShape)
         x = ksl.Conv2D(64,(3,3),padding='same',activation='relu')(inp)
         x = ksl.MaxPool2D(pool_size=[2,2])(x)
         x = ksl.Dropout(0.3)(x)
@@ -20,12 +22,16 @@ class Model:
         x = ksl.Dense(256,activation = 'relu')(x)
         x = ksl.Lambda(lambda x: tf.math.l2_normalize(x,axis = 1))(x)
         model = tf.keras.Model(inp,x)
-        im1 = ksl.Input([128,128,3])
-        im2 = ksl.Input([128,128,3])
-        feature1 = model(im1)
-        feature2 = model(im2)
-        distance = ksl.Lambda(self.euclidean_distance)([feature1,feature2]) 
-        net = tf.keras.Model([im1,im2],distance)
+        if self.mode == 'simple':
+            im1 = ksl.Input(inputShape)
+            im2 = ksl.Input(inputShape)
+            feature1 = model(im1)
+            feature2 = model(im2)
+            distance = ksl.Lambda(self.euclidean_distance)([feature1,feature2]) 
+            net = tf.keras.Model([im1,im2],distance)
+        elif self.mode == 'triplet':
+            net = Model
+            
         return net
     def compileModel(self):
         optim = tf.keras.optimizers.Adam(learning_rate=0.1)
