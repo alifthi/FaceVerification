@@ -15,8 +15,9 @@ class Model:
         x = ksl.Conv2D(64,(2,2),padding='same',activation='relu')(x)
         x = ksl.MaxPool2D(pool_size=[2,2])(x)
         x = ksl.Dropout(0.3)(x)
-        poolOut = ksl.GlobalAveragePooling2D()(x)
-        x = ksl.Dense(256)(poolOut)
+        x = ksl.GlobalAveragePooling2D()(x)
+        x = ksl.Flatten()(x)
+        x = ksl.Dense(256)(x)
         model = tf.keras.Model(inp,x)
         im1 = ksl.Input([128,128,3])
         im2 = ksl.Input([128,128,3])
@@ -30,7 +31,7 @@ class Model:
         self.net.compile(loss = self.controstivLoss(),optimizer=optim,metrics=['accuracy'])
         self.net.summary()
     def train(self,images,target,valData = None):
-        self.net.fit(images,target,epochs=10,batch_size=128,validation_data=valData)
+        self.net.fit(images,target,epochs=10,batch_size=256,validation_data=valData)
     @staticmethod
     def plotHistory(Hist):
         # plot History
